@@ -11,7 +11,7 @@ resource "aws_vpc" "book-review-vpc" {
   enable_dns_support   = true
 
   tags = {
-    Name        = "${var.project}-vpc"
+    Name = "${var.project}-vpc"
   }
 }
 
@@ -25,7 +25,7 @@ resource "aws_subnet" "web_subnet_1" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "${var.project}-web-subnet-1"
+    Name = "${var.project}-web-subnet-1"
   }
 }
 
@@ -39,7 +39,7 @@ resource "aws_subnet" "web_subnet_2" {
   map_public_ip_on_launch = true
 
   tags = {
-    Name        = "${var.project}-web-subnet-2"
+    Name = "${var.project}-web-subnet-2"
   }
 }
 
@@ -47,10 +47,10 @@ resource "aws_subnet" "web_subnet_2" {
 resource "aws_subnet" "app_subnet_1" {
   vpc_id            = aws_vpc.book-review-vpc.id
   availability_zone = data.aws_availability_zones.azs.names[0]
-  cidr_block        = var.app_subnet_1_cidr 
+  cidr_block        = var.app_subnet_1_cidr
 
   tags = {
-    Name        = "${var.project}-app-subnet-1"
+    Name = "${var.project}-app-subnet-1"
   }
 }
 
@@ -58,10 +58,10 @@ resource "aws_subnet" "app_subnet_1" {
 resource "aws_subnet" "app_subnet_2" {
   vpc_id            = aws_vpc.book-review-vpc.id
   availability_zone = data.aws_availability_zones.azs.names[1]
-  cidr_block        = var.app_subnet_2_cidr 
+  cidr_block        = var.app_subnet_2_cidr
 
   tags = {
-    Name        = "${var.project}-app-subnet-2"
+    Name = "${var.project}-app-subnet-2"
   }
 }
 
@@ -70,10 +70,10 @@ resource "aws_subnet" "app_subnet_2" {
 resource "aws_subnet" "db_subnet_1" {
   vpc_id            = aws_vpc.book-review-vpc.id
   availability_zone = data.aws_availability_zones.azs.names[0]
-  cidr_block        = var.db_subnet_1_cidr 
+  cidr_block        = var.db_subnet_1_cidr
 
   tags = {
-    Name        = "${var.project}-db-subnet-1"
+    Name = "${var.project}-db-subnet-1"
   }
 }
 
@@ -81,10 +81,10 @@ resource "aws_subnet" "db_subnet_1" {
 resource "aws_subnet" "db_subnet_2" {
   vpc_id            = aws_vpc.book-review-vpc.id
   availability_zone = data.aws_availability_zones.azs.names[1]
-  cidr_block        = var.db_subnet_2_cidr 
+  cidr_block        = var.db_subnet_2_cidr
 
   tags = {
-    Name        = "${var.project}-db-subnet-2"
+    Name = "${var.project}-db-subnet-2"
   }
 }
 

@@ -1,6 +1,6 @@
 variable "book_review_vpc_id" {
   description = "book review vpc id"
-  type = string
+  type        = string
 
 }
 variable "project" {
@@ -10,5 +10,5 @@ variable "project" {
 variable "vpc_cidr_block" {
   description = "The CIDR block for the VPC"
   type        = string
-  
+
 }

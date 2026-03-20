@@ -46,10 +46,10 @@ resource "aws_security_group" "web_sg" {
 
 # Allows web traffic from the public ALB to web servers.
 resource "aws_security_group_rule" "web_sg_inbound" {
-  type              = "ingress"
-  from_port         = 80
-  to_port           = 80
-  protocol          = "tcp"
+  type                     = "ingress"
+  from_port                = 80
+  to_port                  = 80
+  protocol                 = "tcp"
   source_security_group_id = aws_security_group.pub_alb_sg.id
   security_group_id        = aws_security_group.web_sg.id
 }
@@ -61,7 +61,7 @@ resource "aws_security_group_rule" "web_sg_ssh_inbound" {
   to_port           = 22
   protocol          = "tcp"
   cidr_blocks       = ["0.0.0.0/0"]
-  security_group_id        = aws_security_group.web_sg.id
+  security_group_id = aws_security_group.web_sg.id
 }
 
 # Allows outbound traffic from web servers.
@@ -87,10 +87,10 @@ resource "aws_security_group" "internal_alb_sg" {
 
 # Allows app traffic from web tier to the internal ALB.
 resource "aws_security_group_rule" "internal_alb_sg_inbound" {
-  type              = "ingress"
-  from_port         = 3001
-  to_port           = 3001
-  protocol          = "tcp"
+  type                     = "ingress"
+  from_port                = 3001
+  to_port                  = 3001
+  protocol                 = "tcp"
   source_security_group_id = aws_security_group.web_sg.id
   security_group_id        = aws_security_group.internal_alb_sg.id
 }
@@ -117,20 +117,20 @@ resource "aws_security_group" "app_sg" {
 
 # Allows app traffic from the internal ALB to app servers.
 resource "aws_security_group_rule" "app_sg_inbound" {
-  type              = "ingress"
-  from_port         = 3001
-  to_port           = 3001
-  protocol          = "tcp"
+  type                     = "ingress"
+  from_port                = 3001
+  to_port                  = 3001
+  protocol                 = "tcp"
   source_security_group_id = aws_security_group.internal_alb_sg.id
   security_group_id        = aws_security_group.app_sg.id
 }
 
 # Allows SSH access to app servers from web tier.
 resource "aws_security_group_rule" "app_sg_ssh_inbound" {
-  type              = "ingress"
-  from_port         = 22
-  to_port           = 22
-  protocol          = "tcp"
+  type                     = "ingress"
+  from_port                = 22
+  to_port                  = 22
+  protocol                 = "tcp"
   source_security_group_id = aws_security_group.web_sg.id
   security_group_id        = aws_security_group.app_sg.id
 }
@@ -158,10 +158,10 @@ resource "aws_security_group" "db_sg" {
 
 # Allows MySQL traffic from app servers to the database.
 resource "aws_security_group_rule" "db_sg_inbound" {
-  type              = "ingress"
-  from_port         = 3306
-  to_port           = 3306
-  protocol          = "tcp"
+  type                     = "ingress"
+  from_port                = 3306
+  to_port                  = 3306
+  protocol                 = "tcp"
   source_security_group_id = aws_security_group.app_sg.id
   security_group_id        = aws_security_group.db_sg.id
 }

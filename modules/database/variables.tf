@@ -1,14 +1,14 @@
 # First private subnet ID for the database subnet group.
-variable "db_subnet_1_id" { 
+variable "db_subnet_1_id" {
   description = "The ID of the first subnet for the RDS database"
   type        = string
-  
+
 }
 # Second private subnet ID for the database subnet group.
-variable "db_subnet_2_id" { 
+variable "db_subnet_2_id" {
   description = "The ID of the second subnet for the RDS database"
   type        = string
-  
+
 }
 
 

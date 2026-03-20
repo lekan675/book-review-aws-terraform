@@ -57,3 +57,13 @@ variable "project" {
   description = "The name of the project"
   type        = string
 }
+
+variable "web_user_data" {
+  description = "Rendered user-data script for the web server"
+  type        = string
+}
+
+variable "app_user_data" {
+  description = "Rendered user-data script for the app server"
+  type        = string
+}

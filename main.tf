@@ -33,6 +33,7 @@ module "security" {
   vpc_cidr_block     = var.vpc_cidr_block
 }
 
+
 module "ec2" {
   source = "./modules/ec2"
 
@@ -46,11 +47,23 @@ module "ec2" {
   app_subnet_2_id   = module.vpc.app_subnet_2_id
   web_subnet_1_id   = module.vpc.web_subnet_1_id
   web_subnet_2_id   = module.vpc.web_subnet_2_id
-} 
 
+  web_user_data = templatefile("${path.root}/scripts/frontend-userdata.sh.tpl", {
+    public_alb_dns  = module.alb.public_alb_dns_name
+    private_alb_dns = module.alb.private_alb_dns_name
+  })
+
+  app_user_data = templatefile("${path.root}/scripts/backend-userdata.sh.tpl", {
+    db_host        = split(":", module.database.db_endpoint)[0]
+    db_user        = var.username
+    db_pass        = var.password
+    db_name        = var.db_name
+    public_alb_dns = module.alb.public_alb_dns_name
+  })
+}
 
 module "database" {
-  source = "./modules/database"
+  source            = "./modules/database"
   project           = var.project
   allocated_storage = var.allocated_storage
   db_name           = var.db_name
@@ -59,22 +72,22 @@ module "database" {
   instance_class    = var.instance_class
   username          = var.username
   password          = var.password
-  db_subnet_1_id   = module.vpc.db_subnet_1_id
-  db_sg_id         = module.security.db_sg_id
-  db_subnet_2_id   = module.vpc.db_subnet_2_id
-} 
+  db_subnet_1_id    = module.vpc.db_subnet_1_id
+  db_sg_id          = module.security.db_sg_id
+  db_subnet_2_id    = module.vpc.db_subnet_2_id
+}
 
 module "alb" {
   source = "./modules/alb"
 
-  project           = var.project
-  vpc_id            = module.vpc.vpc_id
-  web_subnet_1_id   = module.vpc.web_subnet_1_id
-  web_subnet_2_id   = module.vpc.web_subnet_2_id
-  app_subnet_1_id   = module.vpc.app_subnet_1_id
-  app_subnet_2_id   = module.vpc.app_subnet_2_id
-  internal_alb_sg_id = module.security.internal_alb_sg_id
-  pub_alb_sg_id   = module.security.pub_alb_sg_id
+  project                = var.project
+  vpc_id                 = module.vpc.vpc_id
+  web_subnet_1_id        = module.vpc.web_subnet_1_id
+  web_subnet_2_id        = module.vpc.web_subnet_2_id
+  app_subnet_1_id        = module.vpc.app_subnet_1_id
+  app_subnet_2_id        = module.vpc.app_subnet_2_id
+  internal_alb_sg_id     = module.security.internal_alb_sg_id
+  pub_alb_sg_id          = module.security.pub_alb_sg_id
   web_server_instance_id = module.ec2.web_server_instance_id
-  app_server_instance_id = module.ec2.app_server_instance_id 
+  app_server_instance_id = module.ec2.app_server_instance_id
 }
