@@ -60,7 +60,8 @@ Manually provisioning cloud infrastructure is slow, error-prone, and impossible 
 
 ## Architecture
 
-<img width="951" height="519" alt="arc" src="https://github.com/user-attachments/assets/a2aae47f-e52e-4047-9fb3-07e590832807" />
+<img width="1408" height="768" alt="Gemini_Generated_Image_ngwv0pngwv0pngwv" src="https://github.com/user-attachments/assets/9db79b5e-d1df-44df-9368-5c2909392310" />
+
                           
 ### Network Layout
 
