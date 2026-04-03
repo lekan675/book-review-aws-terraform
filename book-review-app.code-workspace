@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"path": "../book-review-app"
+		},
+		{
+			"name": "book-review-terraform-iac",
+			"path": "../book-review-app/book-review-terraform-iac"
+		}
+	],
+	"settings": {}
+}

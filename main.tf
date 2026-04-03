@@ -4,12 +4,39 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
+    tls = {
+      source  = "hashicorp/tls"
+      version = "~> 4.0"
+    }
+    local = {
+      source  = "hashicorp/local"
+      version = "~> 2.0"
+    }
   }
 }
 
 # Configure the AWS Provider
 provider "aws" {
   region = var.aws_region
+}
+
+# Generates a 4096-bit RSA private key for SSH access to EC2 instances.
+resource "tls_private_key" "book_review_key" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
+# Uploads the generated public key to AWS as a named key pair.
+resource "aws_key_pair" "book_review_key" {
+  key_name   = var.keyname
+  public_key = tls_private_key.book_review_key.public_key_openssh
+}
+
+# Saves the private key locally as book-review-key.pem for SSH sign-in.
+resource "local_sensitive_file" "book_review_pem" {
+  content         = tls_private_key.book_review_key.private_key_pem
+  filename        = "${path.root}/${var.keyname}.pem"
+  file_permission = "0400"
 }
 
 module "vpc" {
