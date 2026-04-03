@@ -60,69 +60,8 @@ Manually provisioning cloud infrastructure is slow, error-prone, and impossible 
 
 ## Architecture
 
-```
-                            ┌───────────────────────────────────────┐
-                            │           INTERNET (0.0.0.0/0)        │
-                            └──────────────────┬────────────────────┘
-                                               │ HTTP :80
-                                               ▼
-                            ┌──────────────────────────────────────┐
-                            │         PUBLIC ALB (public-alb)       │
-                            │   web_subnet_1 (AZ-a) + web_subnet_2  │
-                            │   SG: pub_alb_sg (0.0.0.0/0 → :80)  │
-                            └──────────────────┬───────────────────┘
-                                               │ HTTP :80
-                  ╔════════════════════════════╧════════════════════════════╗
-                  ║               WEB TIER — Public Subnets                 ║
-                  ║                                                          ║
-                  ║  ┌──────────────────────────────────────────────────┐   ║
-                  ║  │  web_server  (EC2 t3.micro, Ubuntu 24.04)        │   ║
-                  ║  │  Subnet: web_subnet_1  │  Public IP: yes         │   ║
-                  ║  │  SG: web_sg                                       │   ║
-                  ║  │                                                    │   ║
-                  ║  │  Processes:                                        │   ║
-                  ║  │   • Nginx :80  ──► /api/*  ──► internal ALB:3001 │   ║
-                  ║  │                └─► /*      ──► localhost:3000     │   ║
-                  ║  │   • Next.js frontend  (PM2, port 3000)            │   ║
-                  ║  └──────────────────────────┬───────────────────────┘   ║
-                  ╚═══════════════════════════════╪════════════════════════╝
-                                                  │ HTTP :3001
-                            ┌─────────────────────▼─────────────────────┐
-                            │       INTERNAL ALB (private-alb)           │
-                            │  app_subnet_1 (AZ-a) + app_subnet_2 (AZ-b) │
-                            │  SG: internal_alb_sg (:3001 from web_sg)   │
-                            └─────────────────────┬─────────────────────┘
-                                                  │ HTTP :3001
-                  ╔═══════════════════════════════╪════════════════════════╗
-                  ║              APP TIER — Private Subnets                ║
-                  ║                                                         ║
-                  ║  ┌──────────────────────────────────────────────────┐  ║
-                  ║  │  app_server  (EC2 t3.micro, Ubuntu 24.04)        │  ║
-                  ║  │  Subnet: app_subnet_1  │  Public IP: no          │  ║
-                  ║  │  SG: app_sg                                       │  ║
-                  ║  │                                                    │  ║
-                  ║  │  Processes:                                        │  ║
-                  ║  │   • Node.js API  (PM2, port 3001)                 │  ║
-                  ║  │   • Connects to RDS via env DB_HOST               │  ║
-                  ║  └──────────────────────────┬───────────────────────┘  ║
-                  ╚═══════════════════════════════╪═══════════════════════╝
-                                                  │ MySQL :3306
-                  ╔═══════════════════════════════╪════════════════════════╗
-                  ║            DATABASE TIER — Private Subnets             ║
-                  ║                                                         ║
-                  ║  ┌──────────────────────────────────────────────────┐  ║
-                  ║  │  RDS MySQL 8.4  (db.t3.micro)                    │  ║
-                  ║  │  Subnets: db_subnet_1 (AZ-a), db_subnet_2 (AZ-b) │  ║
-                  ║  │  SG: db_sg  (:3306 from app_sg only)             │  ║
-                  ║  │  Database: bookreviewdb                           │  ║
-                  ║  └──────────────────────────────────────────────────┘  ║
-                  ╚══════════════════════════════════════════════════════╝
-
-Outbound internet for private subnets: via NAT Gateway in web_subnet_1
-```
-
-![Architectural Diagram](assets/architetural-diagram.jpeg)
-
+<img width="951" height="519" alt="arc" src="https://github.com/user-attachments/assets/a2aae47f-e52e-4047-9fb3-07e590832807" />
+                          
 ### Network Layout
 
 | Subnet | CIDR | Type | Tier |
